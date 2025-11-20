@@ -28,7 +28,7 @@ class Sudoku:
         return resultado
                 
         
-    def establecerValoresIniciales(self, logs : bool = False) -> None:
+    def establecerValoresIniciales(self, boardname : str, logs : bool = False) -> None:
         # op = input("1. Windows\n2. Linux\n")
         # if op == 1:
         #     name = "C:\\Users\\jaram\\codes\\sudoku\\v1\\src\\tablas.txt"
@@ -48,10 +48,9 @@ class Sudoku:
         #             self.tab_dom[key] = {int(valor)}
         with open(boardname, 'r') as f:
             for key in self.strKeys:
-                valor=f.readline().strip()
-                if valor.isdigit() and len(valor) == 1:  # Verifica si es un solo dígito
-                  #print(f"{key}={valor}")
-                  self.tab_dom[key]={int(valor)}
+                valor = f.readline().strip()
+                if valor.isdigit() and len(valor) == 1:
+                    self.tab_dom[key]={int(valor)}
     
     
     def allDif(self, logs : bool = False, contador : int = 0):
@@ -203,3 +202,4 @@ class Sudoku:
             print("\n\tSudoku llenado con exito!!!")
 
         return True
+
