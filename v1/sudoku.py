@@ -47,10 +47,16 @@ class Sudoku:
         #                 print(f"Asignando en {key} el valor {valor}")
         #             self.tab_dom[key] = {int(valor)}
         with open(boardname, 'r') as f:
+            if logs:
+                print("Exito abriendo el archivo.")
             for key in self.strKeys:
                 valor = f.readline().strip()
                 if valor.isdigit() and len(valor) == 1:
+                    if logs:
+                        print(f"Estableciendo valor en {key}")
                     self.tab_dom[key]={int(valor)}
+        if logs:
+            print("Proceso terminado")
     
     
     def allDif(self, logs : bool = False, contador : int = 0):
