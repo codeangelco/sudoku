@@ -1,4 +1,5 @@
 import itertools as it
+from operator import le
 import time
     
 class Sudoku:
@@ -28,7 +29,13 @@ class Sudoku:
                 
         
     def establecerValoresIniciales(self, logs : bool = False) -> None:
-        with open("C:\\Users\\jaram\\codes\\sudoku\\v1\\src\\tablas.txt", "r") as f:
+        # op = input("1. Windows\n2. Linux\n")
+        # if op == 1:
+        #     name = "C:\\Users\\jaram\\codes\\sudoku\\v1\\src\\tablas.txt"
+        # else:
+        #     name =  "/mnt/c/Users/jaram/codes/sudoku/v1/src/tablas.txt"
+        name =  "/mnt/c/Users/jaram/codes/sudoku/v1/src/tablas.txt"
+        with open(name, "r") as f:
             tabla: str = input("Ingrese el numero de tabla a tratar: ")
             lineas: list[str] = f.readlines()
             id: int = lineas.index(f"Grid {tabla}\n")
@@ -74,7 +81,7 @@ class Sudoku:
         if actualizacion:
             if logs:
                 print("Hubo actualizaciones, repitiendo proceso. (allDif)")
-                time.sleep(10) 
+                time.sleep(2) 
             return self.allDif(logs, contador + 1)
         else:
             return contador
@@ -106,7 +113,7 @@ class Sudoku:
         if actualizacion:
             if logs:
                 print("Hubo actualizaciones, repitiendo proceso. (finBlock)")
-                time.sleep(10)
+                time.sleep(2)
             return self.finBlock(logs, contador + 1)
         else:
             return contador
@@ -122,5 +129,70 @@ class Sudoku:
                     print("\tSe siguen encontrando valores. (resolver)")
                 else:
                     print("\tSe dejaron de encontar valores. (resolver)")
-                time.sleep(5)
-                
+                time.sleep(2)
+    
+    def ruleBrock(self, id : str, logs : bool = False) -> bool:
+        if logs:
+            print(f"Revisando en cuadricula a {id}")
+        values = "ABCDEFGHI"
+        letra, numero = id
+        i = int(numero) - 1
+        j = values.find(letra)
+        for x in range(i // 3 * 3, i // 3 * 3 + 3):
+            for y in range(j // 3 * 3, j // 3 * 3 + 3):
+                llave = self.strKeys[x * 9 + y]
+                if llave == id:
+                    continue
+                if self.tab_dom[llave] == self.tab_dom[id]:
+                    if logs:
+                        print(f"Incorrecto, rompio con {llave}")
+                    return True
+        for _letra in "ABCDEFGHI":
+            if _letra == letra:
+                continue
+            llave = f"{_letra}{numero}"
+            if self.tab_dom[llave] == self.tab_dom[id]:
+                if logs:
+                    print(f"Incorrecto, rompio con {llave}")
+                return True
+        for _numero in range(1,10):
+            if _numero == int(numero):
+                continue
+            llave: str = f"{letra}{_numero}"
+            if self.tab_dom[llave] == self.tab_dom[id]:
+                if logs:
+                    print(f"Incorrecto, rompio con {llave}")
+                return True
+        if logs:
+            print("Correcto, no rompio")
+        return False
+    
+    
+    def backtracking(self, logs : bool = False, base : int = 0):
+        for i in range(base, 81):
+            llave = self.strKeys[i]
+            if len(self.tab_dom[llave]) == 1:
+                continue
+            if logs:
+                print(f"Incia prueba con {llave}")
+            for valor in range(1, 10):
+                dominio = self.tab_dom[llave]
+                self.tab_dom[llave] = {valor}
+                if self.ruleBrock(llave, logs):
+                    self.tab_dom[llave] = dominio
+                    continue
+                if not self.backtracking(logs, i + 1):
+                    if logs:
+                        print(f"Funcionaba pero rompia futuras soluciones la {llave}")
+                        time.sleep(5)
+                    self.tab_dom[llave] = dominio
+                    continue
+                else:
+                    return True
+            if len(self.tab_dom[llave]) != 1:
+                if logs:
+                    print(f"Ningun caso posible, aplicando backtracking en {llave}")
+                return False
+        if logs:
+            print("\n\tSudoku llenado con exito!!!")
+        return True
