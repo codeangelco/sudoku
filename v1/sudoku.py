@@ -34,18 +34,24 @@ class Sudoku:
         #     name = "C:\\Users\\jaram\\codes\\sudoku\\v1\\src\\tablas.txt"
         # else:
         #     name =  "/mnt/c/Users/jaram/codes/sudoku/v1/src/tablas.txt"
-        name =  "/mnt/c/Users/jaram/codes/sudoku/v1/src/tablas.txt"
-        with open(name, "r") as f:
-            tabla: str = input("Ingrese el numero de tabla a tratar: ")
-            lineas: list[str] = f.readlines()
-            id: int = lineas.index(f"Grid {tabla}\n")
-            for linea, i in zip(lineas[id + 1 : id + 10], range(9)):
-                for key, valor in zip(self.strKeys[i * 9 : i * 9 + 9], linea):
-                    if int(valor) == 0:
-                        continue
-                    if logs:
-                        print(f"Asignando en {key} el valor {valor}")
-                    self.tab_dom[key] = {int(valor)}
+        # name =  "/mnt/c/Users/jaram/codes/sudoku/v1/src/tablas.txt"
+        # with open(name, "r") as f:
+        #     tabla: str = input("Ingrese el numero de tabla a tratar: ")
+        #     lineas: list[str] = f.readlines()
+        #     id: int = lineas.index(f"Grid {tabla}\n")
+        #     for linea, i in zip(lineas[id + 1 : id + 10], range(9)):
+        #         for key, valor in zip(self.strKeys[i * 9 : i * 9 + 9], linea):
+        #             if int(valor) == 0:
+        #                 continue
+        #             if logs:
+        #                 print(f"Asignando en {key} el valor {valor}")
+        #             self.tab_dom[key] = {int(valor)}
+        with open(boardname, 'r') as f:
+            for key in self.strKeys:
+                valor=f.readline().strip()
+                if valor.isdigit() and len(valor) == 1:  # Verifica si es un solo dígito
+                  #print(f"{key}={valor}")
+                  self.tab_dom[key]={int(valor)}
     
     
     def allDif(self, logs : bool = False, contador : int = 0):
@@ -195,4 +201,5 @@ class Sudoku:
                 return False
         if logs:
             print("\n\tSudoku llenado con exito!!!")
+
         return True
