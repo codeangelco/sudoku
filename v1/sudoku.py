@@ -1,5 +1,4 @@
 import itertools as it
-from operator import le
 import time
     
 class Sudoku:
@@ -34,7 +33,7 @@ class Sudoku:
         #     name = "C:\\Users\\jaram\\codes\\sudoku\\v1\\src\\tablas.txt"
         # else:
         #     name =  "/mnt/c/Users/jaram/codes/sudoku/v1/src/tablas.txt"
-        # name =  "/mnt/c/Users/jaram/codes/sudoku/v1/src/tablas.txt"
+        # name =  "C:\\Users\\jaram\\codes\\sudoku\\v1\\src\\tablas.txt"
         # with open(name, "r") as f:
         #     tabla: str = input("Ingrese el numero de tabla a tratar: ")
         #     lineas: list[str] = f.readlines()
@@ -92,7 +91,7 @@ class Sudoku:
         if actualizacion:
             if logs:
                 print("Hubo actualizaciones, repitiendo proceso. (allDif)")
-                time.sleep(2) 
+                time.sleep(0.5) 
             return self.allDif(logs, contador + 1)
         else:
             return contador
@@ -124,7 +123,7 @@ class Sudoku:
         if actualizacion:
             if logs:
                 print("Hubo actualizaciones, repitiendo proceso. (finBlock)")
-                time.sleep(2)
+                time.sleep(0.5)
             return self.finBlock(logs, contador + 1)
         else:
             return contador
@@ -140,7 +139,7 @@ class Sudoku:
                     print("\tSe siguen encontrando valores. (resolver)")
                 else:
                     print("\tSe dejaron de encontar valores. (resolver)")
-                time.sleep(2)
+                time.sleep(1)
     
     def ruleBrock(self, id : str, logs : bool = False) -> bool:
         if logs:
@@ -195,7 +194,7 @@ class Sudoku:
                 if not self.backtracking(logs, i + 1):
                     if logs:
                         print(f"Funcionaba pero rompia futuras soluciones la {llave}")
-                        time.sleep(5)
+                        time.sleep(0.1)
                     self.tab_dom[llave] = dominio
                     continue
                 else:
@@ -209,3 +208,11 @@ class Sudoku:
 
         return True
 
+tabla = Sudoku()
+tabla.establecerValoresIniciales("board.txt")
+
+tabla.resolver(True)
+tabla.backtracking()
+
+print(tabla)
+print(tabla.tab_dom)
